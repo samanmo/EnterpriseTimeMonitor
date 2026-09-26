@@ -7,12 +7,12 @@ on:
     branches: [ "main" ]
 
 jobs:
-  # Job 1: Verifies the code compiles on your exact local OS environment
+  # Job 1: Verifies the code compiles perfectly on your local Fedora environment
   fedora-build:
     name: Build Verification (Fedora 44)
     runs-on: ubuntu-latest
     container:
-      image: fedora:44  # Spins up an official Fedora 44 instance in the cloud
+      image: fedora:44
 
     steps:
     - name: Checkout Source Code
@@ -31,7 +31,7 @@ jobs:
       run: |
         cmake --build build --config Release
 
-  # Job 2: Verifies cross-compatibility on standard Ubuntu environments
+  # Job 2: Verifies cross-compatibility on modern Debian-based platforms
   ubuntu-build:
     name: Build Verification (Ubuntu 24.04)
     runs-on: ubuntu-24.04
@@ -49,8 +49,8 @@ jobs:
           build-essential \
           cmake \
           qt6-base-dev \
-          libpq-dev \
-          qt6-base-dev-plugins
+          qt6-base-private-dev \
+          libpq-dev
 
     - name: Configure CMake
       run: |
@@ -60,4 +60,3 @@ jobs:
     - name: Execute Debian Compile
       run: |
         cmake --build build --config Release
-
