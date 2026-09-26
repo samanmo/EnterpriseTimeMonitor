@@ -1,4 +1,4 @@
-name: C/C++ CI Build Verification
+name: Enterprise Build Verification
 
 on:
   push:
@@ -7,17 +7,45 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
+  # Job 1: Verifies the code compiles on your exact local OS environment
+  fedora-build:
+    name: Build Verification (Fedora 44)
     runs-on: ubuntu-latest
+    container:
+      image: fedora:44  # Spins up an official Fedora 44 instance in the cloud
 
     steps:
     - name: Checkout Source Code
       uses: actions/checkout@v4
 
-    - name: Install System Toolchain and Qt6 Dependencies
+    - name: Install Fedora Toolchain and Qt6 Dependencies
       run: |
-        sudo apt-get update
-        sudo apt-get install -y \
+        dnf install -y gcc-c++ cmake qt6-qtbase-devel libpq-devel
+
+    - name: Configure CMake
+      run: |
+        mkdir -p build
+        cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+
+    - name: Execute Native Compile
+      run: |
+        cmake --build build --config Release
+
+  # Job 2: Verifies cross-compatibility on standard Ubuntu environments
+  ubuntu-build:
+    name: Build Verification (Ubuntu 24.04)
+    runs-on: ubuntu-24.04
+
+    steps:
+    - name: Checkout Source Code
+      uses: actions/checkout@v4
+
+    - name: Install Debian Toolchain and Qt6 Dependencies
+      env:
+        DEBIAN_FRONTEND: noninteractive
+      run: |
+        sudo apt-get update --error-on=any || sudo apt-get update
+        sudo apt-get install -y --fix-missing \
           build-essential \
           cmake \
           qt6-base-dev \
@@ -26,10 +54,10 @@ jobs:
 
     - name: Configure CMake
       run: |
-        mkdir build
+        mkdir -p build
         cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 
-    - name: Execute Compile Build
+    - name: Execute Debian Compile
       run: |
         cmake --build build --config Release
 
