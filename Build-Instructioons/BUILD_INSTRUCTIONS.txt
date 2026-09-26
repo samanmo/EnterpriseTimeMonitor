@@ -1,0 +1,100 @@
+
+====================================================================
+           HR TIME TRACKER - LOCAL BUILD & RUN INSTRUCTIONS
+====================================================================
+
+1. PROJECT DIRECTORY SETUP
+--------------------------
+Ensure all your files are inside a single folder with this structure:
+  YourProjectFolder/
+    ├── CMakeLists.txt
+    ├── TimeTracker.pro
+    ├── TimeTracker.h
+    ├── TimeTracker.cpp
+    ├── main.cpp
+    └── schema.sql
+
+2. POSTGRESQL DATABASE INITIALIZATION
+--------------------------------------
+Open your PostgreSQL terminal (psql or pgAdmin) and execute:
+
+  -- Create the database
+  CREATE DATABASE hr_database;
+
+  -- Create the user used in your source code
+  CREATE USER hr_admin WITH PASSWORD '12345678';
+
+  -- Grant permissions
+  GRANT ALL PRIVILEGES ON DATABASE hr_database TO hr_admin;
+
+Now run the queries inside 'schema.sql' to build the tables and inject test data.
+
+3. OPTION A: COMPILING WITH QT CREATOR (RECOMMENDED)
+-----------------------------------------------------
+  1. Open Qt Creator.
+  2. Choose "File" -> "Open File or Project...".
+  3. Select either "CMakeLists.txt" or "TimeTracker.pro".
+  4. Select a desktop compiler kit matching Qt 6.x.
+  5. Click the green "Run" button in the bottom left corner.
+
+4. OPTION B: COMPILING VIA COMMAND LINE (CMAKE)
+-----------------------------------------------
+Open your shell terminal inside 'YourProjectFolder/' and execute:
+
+  mkdir build
+  cd build
+  cmake ..
+  cmake --build .
+  ./HRTimeTracker
+  
+------------------------------------------------------
+
+# Flush stale configurations completely
+rm -rf build/
+
+# Rebuild natively using modern CMake targets
+mkdir build && cd build
+cmake ..
+cmake --build .
+
+# Run your modern production application!
+./HRTimeTracker
+
+------------------------------------------------
+cd ~/Workspace/VScodeUIapplications/EnterpriseTimeMonitor/build
+
+# 1. Clear out the build directory
+rm -rf *
+
+# 2. Re-configure the project with the explicit file definitions
+cmake ..
+
+# 3. Build the application
+cmake --build .
+
+# 4. Run
+./HRTimeTracker
+
+--------------------------------------------------------
+# 1. Clean out the local database completely using the admin container context
+sudo -u postgres psql -d hr_database -f schema.sql
+
+# 2. Rerun the C++ Application binary from your build path
+cd ~/Workspace/VScodeUIapplications/EnterpriseTimeMonitor/build
+./HRTimeTracker
+--------------------------------------------------------------------
+Here is the automated setup Bash script tailored for Fedora Linux. This script handles the end-to-end configuration: installing PostgreSQL, starting the service, provisioning the hr_admin user with your updated 12345678 password, initializing the hr_database, and deploying the corrected database schema.
+
+# 1. Ensure you are in your central project development folder root path
+cd ~/Workspace/VScodeUIapplications/EnterpriseTimeMonitor
+
+# 2. Grant executive script privileges to the script file asset
+chmod +x setup_db.sh
+
+# 3. Execute the script (It will prompt for your system sudo password)
+./setup_db.sh
+
+---------------------------------------------------------------------
+
+
+

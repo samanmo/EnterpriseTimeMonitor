@@ -1,0 +1,8 @@
+Please modify the code in order to fulfil the following requirements.
+(1) The employees that have been added by managers can access the system.
+(2) At the Employee window, anyone can monitor who is currently clocked-in.
+(3) Any added employee can be selected with the drop down menu for clock in or clock out.
+(3) If a project is selected, its clock-in detail can be generated into a file at the manager window.
+(4) If an employee is selected, their clock-in details can be taken into a file at the manager window.
+(5) The managers are also employees with special privileges.
+(6) At the manager window, if a project is selected its associate tasks can be seen.
