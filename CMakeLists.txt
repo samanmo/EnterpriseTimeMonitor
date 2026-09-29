@@ -14,7 +14,7 @@ include_directories(include)
 # CRITICAL FIX: Explicitly discover headers alongside source definitions
 # This ensures CMAKE_AUTOMOC intercepts Q_OBJECT inside TimeTracker.h
 file(GLOB_RECURSE SOURCES 
-    "main.cpp"
+    #"main.cpp"
     "src/*.cpp"
 )
 
