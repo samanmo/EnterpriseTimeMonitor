@@ -10,6 +10,10 @@
 #include <QFileDialog>
 #include <QTextStream>
 
+#include "data/VisualReportWindow.h"  // 🌟 Target the clean header map now
+//#include "data/VisualReportWindow.cpp"  // <-- ADD THIS LINE HERE
+
+
 TimeTracker::TimeTracker(std::shared_ptr<IRepository> repo, QWidget *parent) 
     : QWidget(parent), m_repo(repo) {
     
@@ -468,6 +472,9 @@ void TimeTracker::refreshManagerDashboard() {
 }
 
 void TimeTracker::exportProjectReport() {
+
+    (new VisualReportWindow(reportProjectDropdown->currentData().toString().toStdString(), this))->exec();
+
     if (!reportProjectDropdown || !m_repo) return;
     QString pNum = reportProjectDropdown->currentData().toString();
     if (pNum.isEmpty()) {
